@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<link
+			rel="stylesheet"
+			href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0"
+		/>
+		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@1/css/pico.min.css" />
+		%sveltekit.head%
+	</head>
+	<body data-sveltekit-preload-data="hover">
+		<div style="display: contents">%sveltekit.body%</div>
+		<div id="theme_switcher"></div>
+	</body>
+
+	<script>
+		let isLight = true;
+		const html = document.documentElement;
+		const switchTheme = document.getElementById('theme_switcher');
+
+		document.addEventListener('DOMContentLoaded', () => {
+			switchTheme.innerHTML = 'to dark mode';
+			html.setAttribute('data-theme', 'auto');
+			switchTheme.focus();
+			removeTooltip(3000);
+		});
+		switchTheme.addEventListener('click', (e) => {
+			e.preventDefault();
+			isLight = !isLight;
+			html.setAttribute('data-theme', isLight ? 'light' : 'dark');
+			switchTheme.innerHTML = isLight ? 'to dark mode' : 'to light mode';
+			removeTooltip();
+		});
+		const removeTooltip = (timeInt = 1750) => {
+			setTimeout(() => {
+				switchTheme.blur();
+			}, timeInt);
+		};
+	</script>
+
+	<style>
+		/* Yellow Light scheme (Default) */
+		/* Can be forced with data-theme="light" */
+		[data-theme='light'],
+		:root:not([data-theme='dark']) {
+			--primary: #fdd835;
+			--primary-hover: #fbc02d;
+			--primary-focus: rgba(253, 216, 53, 0.125);
+			--primary-inverse: rgba(0, 0, 0, 0.75);
+		}
+
+		/* Yellow Dark scheme (Auto) */
+		/* Automatically enabled if user has Dark mode enabled */
+		@media only screen and (prefers-color-scheme: dark) {
+			:root:not([data-theme]) {
+				--primary: #fdd835;
+				--primary-hover: #ffeb3b;
+				--primary-focus: rgba(253, 216, 53, 0.25);
+				--primary-inverse: rgba(0, 0, 0, 0.75);
+			}
+		}
+
+		/* Yellow Dark scheme (Forced) */
+		/* Enabled if forced with data-theme="dark" */
+		[data-theme='dark'] {
+			--primary: #fdd835;
+			--primary-hover: #ffeb3b;
+			--primary-focus: rgba(253, 216, 53, 0.25);
+			--primary-inverse: rgba(0, 0, 0, 0.75);
+		}
+
+		/* Yellow (Common styles) */
+		:root {
+			--form-element-active-border-color: var(--primary);
+			--form-element-focus-color: var(--primary-focus);
+			--switch-color: var(--primary-inverse);
+			--switch-checked-background-color: var(--primary);
+		}
+		* {
+			padding: 0;
+			margin: 0;
+		}
+		#theme_switcher {
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			text-align: center;
+			height: 80px;
+			cursor: pointer;
+			font-size: 32px;
+		}
+	</style>
+</html>
